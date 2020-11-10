@@ -283,6 +283,7 @@ int main(){
 
 <br><br><br>
 ## Appendix
+### SimFL vs. OpenCL
 * simfl::Context()
 ```cpp
 	/***	SimFL	***/
