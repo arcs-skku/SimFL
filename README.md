@@ -11,6 +11,12 @@
 3. Drivers
    - OpenCL platform drivers
    - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.1
+   
+## How to use
+`$ source setup.sh` <br>
+`#include "simfl.hpp"` in your host code<br>
+`$ g++  -I${SIMFL}/include   ...   -std=c++14 -o TARGET SOURCE   ...   -L${SIMFL} -lSimFL -lOpenCL   ...`
+
 ## Public Member Functions
 ```cpp
 simfl::Context::Context (  const std::string			deviceName, 
