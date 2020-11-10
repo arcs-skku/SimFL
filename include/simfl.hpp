@@ -16,14 +16,14 @@
 #include <CL/cl2.hpp>
 //#include <CL/cl_ext_xilinx.h>
 
-#define S		0		// Scalar value (constant value> do not make buffer
-#define R   1		// Read buffer
-#define H2G	1		// 			"
-#define W		2		// Write buffer
-#define G2H	2		// 			"
-#define RW 	3		// Read & Write buffer
-#define WR	3		//  				"
-#define ALL	-1	// for run|await all kernels
+#define S			0		// Scalar value (constant value> do not make buffer
+#define R			1		// Read buffer
+#define H2G		1		// 			"
+#define W			2		// Write buffer
+#define G2H		2		// 			"
+#define RW		3		// Read & Write buffer
+#define WR		3		//  				"
+#define ALL		-1	// for run|await all kernels
 
 namespace simfl {
 
