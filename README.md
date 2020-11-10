@@ -281,7 +281,7 @@ int main(){
 	/*** OpenCL ***/
 	cl_int err = CL_SUCCESS;
 	
-	std::vector<cl::Platform> platforms;					// Xilinx provides function: get_xil_deivces()
+	std::vector<cl::Platform> platforms;						// Xilinx provides function: get_xil_deivces()
 	err = cl::Platform::get(&platforms);
 	cl::Platform platform;
 	for (int i = 0; i < platforms.size(); i++) {
@@ -290,13 +290,17 @@ int main(){
 		if (platformName == "vendor_name") break;
 	}
 	std::vector<cl::Device> devices
-	err = platform.getDevices(CL_DEVICE_TYPE_ACCELERATOR, &devices)		// std::vector<cl::Device> devices = xcl::get_xil_devices();
+	err = platform.getDevices(CL_DEVICE_TYPE_ACCELERATOR, &devices)			// std::vector<cl::Device> devices = xcl::get_xil_devices();
 	
-	cl::Context context(devices[0], NULL, NULL, NULL, &err);
+	cl::Context context(devices[0], NULL, NULL, NULL, &err);			/*** NULLs
+											properties : use in special case (e.g., specify platform, use OpenGL, etc.)
+											callback function : use to report
+											callback func's argument	***/
 	cl::CommandQueue queue(context, devices[0], CL_QUEUE_PROFILING_ENABLE, &err);
 	
-	vector<unsigned char> fileBuf = xcl::read_binary_file("bitstream.xclbin");	// Xilinx provides function, just file IO (non-opencl)
+	vector<unsigned char> fileBuf = xcl::read_binary_file("bitstream.xclbin");	// just file IO (non-opencl)
 	cl::Program::Binaries bins{{fileBuf.data)_. fileBuf.size()}};
+	devices.resize(1);								// if multiple devices, error occurs
 	cl::Program program(context, devices, bins);
 	cl::Kernel kernel(program, "kernel", &err);
 
