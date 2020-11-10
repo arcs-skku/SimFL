@@ -1,5 +1,6 @@
 # SimFL
 *SimFL(**Sim**ple **F**PGA **L**anguage)* is a programming model for developing FPGA host programs.
+*SimFL* is developing and incomplete.
 
 ## Requirements
 1. OS
