@@ -1,6 +1,16 @@
 # SimFL
 *SimFL(**Sim**ple **F**PGA **L**anguage)* is a programming model for developing FPGA host programs.
 
+## Requirements
+1. OS
+   - Linux
+   - Tested on Ubuntu 16.04
+2. Language
+   - Requires C++14 or higher
+   - Tested on gcc(g++) 5.4.0
+3. Drivers
+   - OpenCL platform drivers
+   - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.1
 ## Public Member Functions
 ```cpp
 simfl::Context::Context (  const std::string			deviceName, 
@@ -277,7 +287,8 @@ int main(){
 ```cpp
 	/***	SimFL	***/
 	simfl::Context context("platform", "bitstream.xclbin", {"kernel"});
-	
+```
+```cpp
 	/***	OpenCL	***/
 	cl_int err = CL_SUCCESS;
 	
@@ -321,7 +332,8 @@ simfl::Context cpmtext("platform", "bitstream.xclbin", "kernel", 2};
 ```cpp
 	/*** SimFL ***/
 	context.arg(0, &input[0], R, dataSize).arg(1, &output[0], W, dataSize).arg(2, dataSize);
-	
+```
+```cpp
 	/*** OpenCL ***/
 	cl::Buffer buf_in(context, CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, sizeof(T) * dataSize, &input[0], &err);
 	cl::Buffer buf_out(context, CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, sizeof(T) * dataSize, &output[0], &err);
