@@ -48,11 +48,6 @@ namespace simfl {
 			return reinterpret_cast<T*>(ptr);
 		}
 
-	template <typename T>
-		void fk_dealloc(T* p) {
-			free(p);
-		}
-
 	class Context {
 		cl_int err;
 		int cuNum;
