@@ -273,12 +273,12 @@ int main(){
 
 <br><br><br>
 ## Appendix
-* simfl::Context
+* simfl::Context()
 ```cpp
-
+	/***	SimFL	***/
 	simfl::Context context("platform", "bitstream.xclbin", {"kernel"});
 	
-	/*** OpenCL ***/
+	/***	OpenCL	***/
 	cl_int err = CL_SUCCESS;
 	
 	std::vector<cl::Platform> platforms;						// Xilinx provides function: get_xil_deivces()
@@ -303,19 +303,30 @@ int main(){
 	devices.resize(1);								// if multiple devices, error occurs
 	cl::Program program(context, devices, bins);
 	cl::Kernel kernel(program, "kernel", &err);
-
 ```
-
-* TEMP
+**Problems**<br>
+When using multiple CUs attached to different banks, only the method using "std::vector<std::string> kernelNames" is safe. <br><br>
+*correct* :<br>
 ```cpp
-int main() {
-	...
-	
-	simfl::Context context("xilinx", "vadd.xclbin", {"vadd"});
-	context.arg(0, &inputData, R, dataSize).arg(1, &outputData, W, dataSize);
-	context.run();
-	context.await();
-	
-	...
-}
+simfl::Context context("platform", "bitstream.xclbin", {"kernel:{kernel_1}, kernel:{kernel_2}"};
 ```
+*may be wrong* :<br>
+```cpp
+simfl::Context context("platform", "bitstream.xclbin");
+simfl::Context cpmtext("platform", "bitstream.xclbin", "kernel", 2};
+```
+<br>
+
+* simf::Context::arg()
+```cpp
+	/*** SimFL ***/
+	context.arg(0, &input[0], R, dataSize).arg(1, &output[0], W, dataSize).arg(2, dataSize);
+	
+	/*** OpenCL ***/
+	cl::Buffer buf_in(context, CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, sizeof(T) * dataSize, &input[0], &err);
+	cl::Buffer buf_out(context, CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, sizeof(T) * dataSize, &output[0], &err);
+	context.setArg(0, buf_in);
+	context.setArg(1, buf_out);
+	context.setArg(2, dataSize);
+```
+**Problems**<br>
