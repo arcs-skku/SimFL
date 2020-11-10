@@ -273,37 +273,33 @@ int main(){
 
 <br><br><br>
 ## Appendix
-* OpenCL example
+* simfl::Context
 ```cpp
-int main() {
 
-	cl_int err = CL_SUCCESS;\
+	simfl::Context context("platform", "bitstream.xclbin", {"kernel"});
 	
-	/* Declare variables ... */
-
-	std::vector<cl::Device> devices = xcl::get_xil_devices();			// API provided by Xilinx
+	/*** OpenCL ***/
+	cl_int err = CL_SUCCESS;
+	
+	std::vector<cl::Platform> platforms;					// Xilinx provides function: get_xil_deivces()
+	err = cl::Platform::get(&platforms);
+	cl::Platform platform;
+	for (int i = 0; i < platforms.size(); i++) {
+		platform = platforms[i];
+		std::string platformName = platform.getInfo<CL_PLATFORM_NAME>(&err);
+		if (platformName == "vendor_name") break;
+	}
+	std::vector<cl::Device> devices
+	err = platform.getDevices(CL_DEVICE_TYPE_ACCELERATOR, &devices)		// std::vector<cl::Device> devices = xcl::get_xil_devices();
+	
 	cl::Context context(devices[0], NULL, NULL, NULL, &err);
 	cl::CommandQueue queue(context, devices[0], CL_QUEUE_PROFILING_ENABLE, &err);
-	std::vector<unsigned char> fileBuf = xcl::read_binary_file("vadd.xclbin");	// API provided by Xilinx
-	cl::Program::Binaries bins{{fileBuf.data(), fileBuf.size()}};
-	cl::Program program(context, devices, bins, NULL, &err);
-	cl::Kernel kernel(program, "vadd", &err);
+	
+	vector<unsigned char> fileBuf = xcl::read_binary_file("bitstream.xclbin");	// Xilinx provides function, just file IO (non-opencl)
+	cl::Program::Binaries bins{{fileBuf.data)_. fileBuf.size()}};
+	cl::Program program(context, devices, bins);
+	cl::Kernel kernel(program, "kernel", &err);
 
-	cl::Buffer buf_input(context, CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, dataSize * sizeof(T), &inputData, &err);
-	cl::Buffer buf_output(context, CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, dataSize * sizeof(T), &outputData, &err);
-	kernel.setArg(0, buf_input);
-	kernel.setArg(1, buf_output);
-
-	queue.enqueueMigrateMemObjects({buf_input}, 0);
-	queue.enqueueTask(kernel);
-	queue.flush();
-	
-	queue.enqueueMigrateMemObjects({buf_output}, CL_MIGRATE_MEM_OBJECT_HOST);
-	queue.finish();
-	
-	...
-	
-}
 ```
 
 * TEMP
