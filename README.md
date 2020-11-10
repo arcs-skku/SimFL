@@ -307,8 +307,8 @@ int main(){
 		std::string platformName = platform.getInfo<CL_PLATFORM_NAME>(&err);
 		if (platformName == "vendor_name") break;
 	}
-	std::vector<cl::Device> devices
-	err = platform.getDevices(CL_DEVICE_TYPE_ACCELERATOR, &devices)			// std::vector<cl::Device> devices = xcl::get_xil_devices();
+	std::vector<cl::Device> devices;
+	err = platform.getDevices(CL_DEVICE_TYPE_ACCELERATOR, &devices);		// std::vector<cl::Device> devices = xcl::get_xil_devices();
 	
 	cl::Context context(devices[0], NULL, NULL, NULL, &err);			/*** NULLs
 											properties : use in special case (e.g., specify platform, use OpenGL, etc.)
@@ -344,10 +344,34 @@ simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 	/*** OpenCL ***/
 	cl::Buffer buf_in(context, CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, sizeof(T) * dataSize, &input[0], &err);
 	cl::Buffer buf_out(context, CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, sizeof(T) * dataSize, &output[0], &err);
-	context.setArg(0, buf_in);
-	context.setArg(1, buf_out);
-	context.setArg(2, dataSize);
+	err = kernel.setArg(0, buf_in);
+	err = kernel.setArg(1, buf_out);
+	err = kernel.setArg(2, dataSize);
 ```
 **Problems**<br><br>
 To satisfy the 4K aligned memory, automatic data distribution `simfl::Context::argSplit()` needs an internal memcpy. <br>
 Performance is good in the order of *direct allocation of aligned data*, *internal memcpy*, and *allocation of non-aligned data*. <br>
+<br>
+* simfl::Context::run()
+```cpp
+	/***	SimFL	***/
+	context.run();
+```
+```cpp
+	/***	OpenCL	***/
+	std::vector<cl::Event> e_send(1), e_task(1);
+	err = queue.enqueueMigrateMemObjects({buf_in}, 0, NULL, &e_send[0]);
+	err = queue.enqueueTask(kernel, &e_send, &e_task[0]);
+```
+<br>
+
+* simfl::Context::await()
+```cpp
+	/***	SimFL	***/
+	context.await();
+```
+```cpp
+	/***	OpenCL	***/
+	err = queue.enqueueMigrateMemObjects({buf_out}, CL_MIGRATE_MEM_OBJECT_HOST, &e_task);
+	queue.finish();
+```
