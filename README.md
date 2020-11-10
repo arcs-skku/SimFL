@@ -322,8 +322,8 @@ int main(){
 	cl::Program program(context, devices, bins);
 	cl::Kernel kernel(program, "kernel", &err);
 ```
-**Problems**<br>
-When using multiple CUs attached to different banks, only the method using "std::vector<std::string> kernelNames" is safe. <br><br>
+**Problems**<br><br>
+When using multiple CUs attached to different banks, only the method using `std::vector<std::string> kernelNames` is safe. <br><br>
 *correct* :<br>
 ```cpp
 simfl::Context context("platform", "bitstream.xclbin", {"kernel:{kernel_1}, kernel:{kernel_2}"};
@@ -331,11 +331,11 @@ simfl::Context context("platform", "bitstream.xclbin", {"kernel:{kernel_1}, kern
 *may be wrong* :<br>
 ```cpp
 simfl::Context context("platform", "bitstream.xclbin");
-simfl::Context cpmtext("platform", "bitstream.xclbin", "kernel", 2};
+simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 ```
 <br>
 
-* simf::Context::arg()
+* simfl::Context::arg()
 ```cpp
 	/*** SimFL ***/
 	context.arg(0, &input[0], R, dataSize).arg(1, &output[0], W, dataSize).arg(2, dataSize);
@@ -348,4 +348,6 @@ simfl::Context cpmtext("platform", "bitstream.xclbin", "kernel", 2};
 	context.setArg(1, buf_out);
 	context.setArg(2, dataSize);
 ```
-**Problems**<br>
+**Problems**<br><br>
+To satisfy the 4K aligned memory, automatic data distribution `simfl::Context::argSplit()` needs an internal memcpy. <br>
+Performanc is good in the order of *direct allocation of aligned data*, *internal memcpy*, and *allocation of non-aligned data*. <br>
