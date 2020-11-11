@@ -281,8 +281,8 @@ int main(){
 	...
 
 	simfl::Context context("xilinx", "vadd.xclbin", "vadd", 2);
-	context.arg(0,  &in[0], R, dataSize)
-	       .arg(1, &out[0], W, dataSize);
+	context.argSplit(0,  &in[0], R, dataSize)
+	       .argSplit(1, &out[0], W, dataSize);
 
 	...
 
