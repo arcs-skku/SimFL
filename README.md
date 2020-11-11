@@ -281,7 +281,8 @@ int main(){
 	...
 
 	simfl::Context context("xilinx", "vadd.xclbin", "vadd", 2);
-	context.argSplit(0, &in[0], R, dataSize).argSplit(1, &out[0], W, dataSize);
+	context.arg(0,  &in[0], R, dataSize)
+	       .arg(1, &out[0], W, dataSize);
 
 	...
 
@@ -339,7 +340,9 @@ simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 * simfl::Context::arg()
 ```cpp
 	/*** SimFL ***/
-	context.arg(0, &input[0], R, dataSize).arg(1, &output[0], W, dataSize).arg(2, dataSize);
+	context.arg(0,  &input[0], R, dataSize)
+	       .arg(1, &output[0], W, dataSize)
+	       .arg(2, dataSize);
 ```
 ```cpp
 	/*** OpenCL ***/
