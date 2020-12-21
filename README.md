@@ -255,7 +255,7 @@ int main(){
 
 	...
 
-	/*** OpenCL ***/
+	/***	OpenCL	***/
 	cl::Kernel kernel1(program, "vadd", &err);
 	cl::Kernel kernel2(program, "vadd", &err);
 
@@ -281,8 +281,8 @@ int main(){
 
 	...
 
-	/*** SimFL ***/
-	simfl::Context context("xilinx", "vadd.xclbin", {"vaadd", "vadd"});
+	/***	SimFL	***/
+	simfl::Context context("xilinx", "vadd.xclbin", {"vadd", "vadd"});
 	context.argSplit(0,  &in[0], R, dataSize)
 	       .argSplit(1, &out[0], W, dataSize);
 
@@ -341,13 +341,13 @@ simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 
 * simfl::Context::arg()
 ```cpp
-	/*** SimFL ***/
+	/***	SimFL	***/
 	context.arg(0,  &input[0], R, dataSize)
 	       .arg(1, &output[0], W, dataSize)
 	       .arg(2, dataSize);
 ```
 ```cpp
-	/*** OpenCL ***/
+	/***	OpenCL	***/
 	cl::Buffer buf_in(context, CL_MEM_USE_HOST_PTR | CL_MEM_READ_ONLY, sizeof(T) * dataSize, &input[0], &err);
 	cl::Buffer buf_out(context, CL_MEM_USE_HOST_PTR | CL_MEM_WRITE_ONLY, sizeof(T) * dataSize, &output[0], &err);
 	err = kernel.setArg(0, buf_in);
