@@ -393,7 +393,7 @@ Performance is good in the order of *direct allocation of aligned data*, *intern
 	context.run();	context.await();
 	
 	
-	int* out = context.argMap<int>(0, R, dataSize);
+	int* input = context.argMap<int>(0, R, dataSize);
 	
 	/*** DO: assignment input data ***/
 	
