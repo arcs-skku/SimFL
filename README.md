@@ -255,6 +255,7 @@ int main(){
 
 	...
 
+	/*** OpenCL ***/
 	cl::Kernel kernel1(program, "vadd", &err);
 	cl::Kernel kernel2(program, "vadd", &err);
 
@@ -280,7 +281,8 @@ int main(){
 
 	...
 
-	simfl::Context context("xilinx", "vadd.xclbin", "vadd", 2);
+	/*** SimFL ***/
+	simfl::Context context("xilinx", "vadd.xclbin", {"vaadd", "vadd"});
 	context.argSplit(0,  &in[0], R, dataSize)
 	       .argSplit(1, &out[0], W, dataSize);
 
