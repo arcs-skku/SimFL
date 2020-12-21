@@ -387,7 +387,7 @@ Performance is good in the order of *direct allocation of aligned data*, *intern
 ```cpp
 	int* input = simfl::aligned_alloc<int>(dataSize);
 	
-	/*** DO: assignment input data ***/
+	/*** DO: assignment for input data ***/
 	
 	context.arg(0, &input[0], R, dataSize);
 	context.run();	context.await();
@@ -395,7 +395,7 @@ Performance is good in the order of *direct allocation of aligned data*, *intern
 	
 	int* input = context.argMap<int>(0, R, dataSize);
 	
-	/*** DO: assignment input data ***/
+	/*** DO: assignment for input data ***/
 	
 	context.run();	context.await();
 ```
