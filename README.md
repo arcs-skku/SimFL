@@ -381,3 +381,21 @@ Performance is good in the order of *direct allocation of aligned data*, *intern
 	err = queue.enqueueMigrateMemObjects({buf_out}, CL_MIGRATE_MEM_OBJECT_HOST, &e_task);
 	queue.finish();
 ```
+<br>
+
+### aligned_alloc & argMap
+```cpp
+	int* input = simfl::aligned_alloc<int>(dataSize);
+	
+	/*** DO: assignment input data ***/
+	
+	context.arg(0, &input[0], R, dataSize);
+	context.run();	context.await();
+	
+	
+	int* out = context.argMap<int>(0, R, dataSize);
+	
+	/*** DO: assignment input data ***/
+	
+	context.run();	context.await();
+```
