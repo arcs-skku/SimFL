@@ -349,8 +349,7 @@ simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 ```
 **Problems**<br><br>
 To satisfy the 4K aligned memory, automatic data distribution `simfl::Context::argSplit()` needs an internal memcpy. <br>
-SimFL performs internally multi-threaded memcpy to minimize overhead of internal memcpy. <br>
-Performance is good in the order of *direct allocation of aligned data*, *multi-threaded memcpy*, and *allocation of non-aligned data*. <br>
+Performance is good in the order of *direct allocation of aligned data*, *internal memcpy*, and *allocation of non-aligned data*. <br>
 <br>
 * simfl::Context::run()
 ```cpp
