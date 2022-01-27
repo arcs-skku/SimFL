@@ -5,13 +5,13 @@
 ## Requirements
 1. OS
    - Linux
-   - Tested on Ubuntu 16.04
+   - Tested on Ubuntu 18.04
 2. Language
    - Requires C++14 or higher
-   - Tested on gcc(g++) 5.4.0
+   - Tested on gcc(g++) 7.5.0
 3. Drivers
    - OpenCL platform drivers
-   - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.1
+   - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.2
    
 ## How to use
 `$ source setup.sh` <br>
@@ -19,13 +19,6 @@
 `$ g++  -I${SIMFL}/include   ...   -std=c++14 -o TARGET SOURCE   ...   -L${SIMFL} -lSimFL -lOpenCL   ...`
 
 ## Public Member Functions
-```cpp
-simfl::Context::Context (  const std::string			deviceName, 
-                      	   const std::string			bitstream
-                         )
-```
-Constructs a `simfl::Context` object.
-It reads information from the bitstream and automatically sets the number of CUs.
 <br>
 ```cpp
 simfl::Context::Context (  const std::string			deviceName, 
@@ -143,7 +136,7 @@ int main() {
 
 <br><br>
 
-* multi CUs
+* multiple CUs
 ```cpp
 /* Single device & Multi compute unit */
 int main() {
