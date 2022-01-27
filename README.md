@@ -5,13 +5,13 @@
 ## Requirements
 1. OS
    - Linux
-   - Tested on Ubuntu 18.04
+   - Tested on Ubuntu 16.04
 2. Language
    - Requires C++14 or higher
-   - Tested on gcc(g++) 7.5.0
+   - Tested on gcc(g++) 5.4.0
 3. Drivers
    - OpenCL platform drivers
-   - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.2
+   - Tested on Xilinx Runtim(xrt) 2019.1 ~ 2020.1
    
 ## How to use
 `$ source setup.sh` <br>
@@ -327,7 +327,7 @@ simfl::Context context("platform", "bitstream.xclbin", {"kernel:{kernel_1}, kern
 ```
 *may be wrong* :<br>
 ```cpp
-simfl::Context context("platform", "bitstream.xclbin");
+simfl::Context context("platform", "bitstream.xclbin", {"kernel", "kernel"});
 simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 ```
 <br>
@@ -349,7 +349,8 @@ simfl::Context context("platform", "bitstream.xclbin", "kernel", 2};
 ```
 **Problems**<br><br>
 To satisfy the 4K aligned memory, automatic data distribution `simfl::Context::argSplit()` needs an internal memcpy. <br>
-Performance is good in the order of *direct allocation of aligned data*, *internal memcpy*, and *allocation of non-aligned data*. <br>
+SimFL performs internally multi-threaded memcpy to minimize overhead of internal memcpy. <br>
+Performance is good in the order of *direct allocation of aligned data*, *multi-threaded memcpy*, and *allocation of non-aligned data*. <br>
 <br>
 * simfl::Context::run()
 ```cpp
